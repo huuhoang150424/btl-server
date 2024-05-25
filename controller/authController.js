@@ -12,7 +12,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "3m" })
+        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "10m" })
     }
     //REFRESH_TOKEN
     async generateRefreshToken(user) {
@@ -32,10 +32,12 @@ class authController {
                 password: hashed
             })
             await newUser.save()
-            res.status(200).json("Success")
+            res.status(200).json({
+                message: "Đăng ký thành công"
+            })
         } catch(err) {
             return res.status(404).json({
-                message: err
+                message: "Đăng ký thất bại"
             })
         }
     }
@@ -60,6 +62,7 @@ class authController {
                 const refreshToken=await authControllers.generateRefreshToken(user) 
                 const {password,...other }=user._doc
                 return res.status(200).json({
+                    message: "Đăng nhập thành công",
                     refreshToken,
                     accessToken,
                     password,
@@ -68,7 +71,7 @@ class authController {
             }
         } catch (err) {
             return res.status(404).json({
-                message: err
+                message: "Đăng nhập thất bại"
             })
         }
     }
@@ -84,7 +87,9 @@ class authController {
                 const newAccessToken=await authControllers.generateAccessToken(user)
                 const newRefreshToken=await authControllers.generateRefreshToken(user)
                 res.status(200).json({
-                    token: newAccessToken
+                    message: "success",
+                    newAccessToken,
+                    newRefreshToken
                 })
             })
         } catch(err) {

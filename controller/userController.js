@@ -12,6 +12,7 @@ class userController {
             })
         } catch (err) {
             return res.status(404).json({
+                message: "success",
                 message: err
             })
         }
@@ -21,6 +22,7 @@ class userController {
         try {
             const newUser= await UsersSchema.findByIdAndUpdate({_id: req.params.id},req.body,{new:true})
             res.status(200).json({
+                message: "success",
                 data: newUser
             })
         } catch (err) {
@@ -34,6 +36,7 @@ class userController {
         try {
             const User= await UsersSchema.findById(req.params.id)
             res.status(200).json({
+                message: "success",
                 data: User
             })
         } catch (err) {
@@ -49,6 +52,7 @@ class userController {
             res.status(200).json("deleteSuccess")
         } catch (err) {
             return res.status(404).json({
+                message: "success",
                 message: err
             })
         }

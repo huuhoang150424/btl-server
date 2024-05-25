@@ -19,7 +19,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "365d" })
+        },process.env.REFRESH_TOKEN_KEY,{ expiresIn: "365d" })
     }
 
     // [POST] (register) 
@@ -61,10 +61,16 @@ class authController {
                 //refresh token
                 const refreshToken=await authControllers.generateRefreshToken(user) 
                 const {password,...other }=user._doc
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                    secure: false,
+                    path: "/",
+                    sameSite: "strict"
+                });
                 return res.status(200).json({
                     message: "Đăng nhập thành công",
-                    refreshToken,
                     accessToken,
+                    refreshToken,
                     password,
                     other
                 })
@@ -79,17 +85,14 @@ class authController {
     async refreshToken(req,res) {
         try {
             const authControllers=new authController
-            const refreshToken=req.headers.token.split(" ")[1]
-            console.log(refreshToken)
+            const refreshToken=req.cookies.refreshToken
             if (!refreshToken) return res.status(401).json("You're not authenticated")
             jwt.verify(refreshToken,process.env.REFRESH_TOKEN_KEY,async (err,user)=>{
                 if (err) console.log(err)
                 const newAccessToken=await authControllers.generateAccessToken(user)
-                const newRefreshToken=await authControllers.generateRefreshToken(user)
                 res.status(200).json({
                     message: "success",
                     newAccessToken,
-                    newRefreshToken
                 })
             })
         } catch(err) {

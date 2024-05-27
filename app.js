@@ -10,22 +10,21 @@ const db=require("./config/database")
 //connect db
 db.connect()
 
-
 const port = 3000 || process.env.PORT
 
-//lấy được dữ liệu qua post và giới hạn 50mb
 app.use(bodyParser.json({limit:"50mb"}))
-//lây refreshToken trong cookie
-app.use(cookieParser())
 
+app.use(cookieParser())
 
 //http logger
 app.use(morgan('combined'))
 
 //chặn
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}))
 route(app)
-
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

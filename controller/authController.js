@@ -12,7 +12,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "10m" })
+        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "30m" })
     }
     //REFRESH_TOKEN
     async generateRefreshToken(user) {
@@ -59,8 +59,9 @@ class authController {
                 //access token
                 const accessToken=await authControllers.generateAccessToken(user) 
                 //refresh token
-                const refreshToken=await authControllers.generateRefreshToken(user) 
-                const {password,...other }=user._doc
+                const refreshToken=await authControllers.generateRefreshToken(user)
+                const {...other}=user._doc
+                console.log(other)
                 res.cookie("refreshToken", refreshToken, {
                     httpOnly: true,
                     secure: false,
@@ -69,10 +70,7 @@ class authController {
                 });
                 return res.status(200).json({
                     message: "Đăng nhập thành công",
-                    accessToken,
-                    refreshToken,
-                    password,
-                    other
+                    accessToken
                 })
             }
         } catch (err) {

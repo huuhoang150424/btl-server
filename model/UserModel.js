@@ -14,7 +14,7 @@ const UsersSchema=new Schema(
         isAdmin: { type: Boolean, default: false, required: true },
         phone: { type: Number },
         address: { type: String },
-        avatar: { type: String },
+        avatar: { type: String,default:"https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg" },
         city: {type: String},
         // access_token: {type:String,require:true},
         // refresh_token: {type:String,require:true}

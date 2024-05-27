@@ -7,7 +7,7 @@ class userController {
     async getAllUser(req,res) {
         try {
             const allUsers=await UsersSchema.find()
-            res.status(200).json({
+            return res.status(200).json({
                 data: allUsers
             })
         } catch (err) {
@@ -21,7 +21,7 @@ class userController {
     async updateUser(req,res) {
         try {
             const newUser= await UsersSchema.findByIdAndUpdate({_id: req.params.id},req.body,{new:true})
-            res.status(200).json({
+            return res.status(200).json({
                 message: "success",
                 data: newUser
             })
@@ -33,9 +33,10 @@ class userController {
     }
     // [getAnUser]
     async getAnUser(req,res) {
+        //console.log(req.headers)
         try {
             const User= await UsersSchema.findById(req.params.id)
-            res.status(200).json({
+            return res.status(200).json({
                 message: "success",
                 data: User
             })
@@ -49,7 +50,7 @@ class userController {
     async deleteUser(req,res) {
         try {
             await UsersSchema.findByIdAndDelete(req.params.id)
-            res.status(200).json("deleteSuccess")
+            return res.status(200).json("deleteSuccess")
         } catch (err) {
             return res.status(404).json({
                 message: "success",

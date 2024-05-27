@@ -7,9 +7,9 @@ const verifyToken=(req,res,next)=>{
     if (token) {
         const accessToken=token.split(" ")[1]
         jwt.verify(accessToken,process.env.ACCESS_TOKEN_KEY,(err,user)=>{
-            if (err) res.status(403).json("Token is not valid")
+            if (err) return res.status(403).json("Token is not valid")
             req.user=user
-            console.log(req.user)
+            //console.log(req.user)
             next()
         })
     } else {
@@ -18,10 +18,10 @@ const verifyToken=(req,res,next)=>{
 }
 const verifyTokenAndUserAuthorization=(req,res,next)=>{
     verifyToken(req,res,()=>{
-        if (req.user && (req.user.id === req.params.id || req.user.isAdmin)) {
+        if (req.user && (req.user.id===req.params.id||req.user.isAdmin)) {
             next()
         } else {
-            res.status(403).json("you're not allow to do that")
+            return res.status(403).json("you're not allow to do that")
         }
     })
 }
@@ -30,16 +30,19 @@ const verifyTokenAdmin=(req,res,next)=>{
         if (req.user.isAdmin) {
             next()
         } else {
-            res.status(403).json("you're not allow to do that")
+            return res.status(403).json("you're not allow to do that")
         }
     })
 }
+
 const verifyTokenUserAuthorization=(req,res,next)=>{
+    console.log(req.headers.token)
+    // console.log(req.user)
     verifyToken(req,res,()=>{
-        if (req.user && (req.params.id=req.user.id)) {
+        if (req.user && (req.params.id===req.user.id)) {
             next()
         } else {
-            res.status(403).json("you're not allow to do that")
+            return res.status(403).json("you're not allow to do that")
         }
     })
 }

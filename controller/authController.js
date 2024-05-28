@@ -12,7 +12,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "50m" })
+        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "10s" })
     }
     //REFRESH_TOKEN
     async generateRefreshToken(user) {
@@ -88,9 +88,11 @@ class authController {
             jwt.verify(refreshToken,process.env.REFRESH_TOKEN_KEY,async (err,user)=>{
                 if (err) console.log(err)
                 const newAccessToken=await authControllers.generateAccessToken(user)
+                const newRefreshToken=await authControllers.generateRefreshToken(user)
                 res.status(200).json({
                     message: "success",
                     newAccessToken,
+                    newRefreshToken
                 })
             })
         } catch(err) {

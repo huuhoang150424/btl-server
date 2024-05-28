@@ -46,11 +46,22 @@ const verifyTokenUserAuthorization=(req,res,next)=>{
         }
     })
 }
+const verifyTokenUser=(req,res,next)=>{
+    console.log(req.headers.token)
+    verifyToken(req,res,()=>{
+        if (req.user) {
+            next()
+        } else {
+            return res.status(403).json("you're not allow to do that")
+        }
+    })
+}
 module.exports={
     verifyToken,
     verifyTokenAndUserAuthorization,
     verifyTokenAdmin,
-    verifyTokenUserAuthorization
+    verifyTokenUserAuthorization,
+    verifyTokenUser
 }
 
 

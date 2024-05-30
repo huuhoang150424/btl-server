@@ -12,7 +12,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "10s" })
+        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "5s" })
     }
     //REFRESH_TOKEN
     async generateRefreshToken(user) {
@@ -60,7 +60,7 @@ class authController {
                 const accessToken=await authControllers.generateAccessToken(user) 
                 //refresh token
                 const refreshToken=await authControllers.generateRefreshToken(user)
-                const {...other}=user._doc
+                const {password,...other}=user._doc
                 //console.log(other)
                 res.cookie("refreshToken", refreshToken, {
                     httpOnly: true,
@@ -84,6 +84,7 @@ class authController {
         try {
             const authControllers=new authController
             const refreshToken=req.cookies.refreshToken
+            console.log(refreshToken)
             if (!refreshToken) return res.status(401).json("You're not authenticated")
             jwt.verify(refreshToken,process.env.REFRESH_TOKEN_KEY,async (err,user)=>{
                 if (err) console.log(err)

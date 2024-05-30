@@ -4,7 +4,7 @@ dotenv.config()
 
 const verifyToken=(req,res,next)=>{
     const token=req.headers.token
-    console.log(req.headers)
+    //console.log(req.headers)
     if (token) {
         const accessToken=token.split(" ")[1]
         jwt.verify(accessToken,process.env.ACCESS_TOKEN_KEY,(err,user)=>{
@@ -37,7 +37,7 @@ const verifyTokenAdmin=(req,res,next)=>{
 }
 
 const verifyTokenUserAuthorization=(req,res,next)=>{
-    console.log(req.headers.token)
+    //console.log(req.headers.token)
     // console.log(req.user)
     verifyToken(req,res,()=>{
         if (req.user && (req.params.id===req.user.id)) {
@@ -48,7 +48,7 @@ const verifyTokenUserAuthorization=(req,res,next)=>{
     })
 }
 const verifyTokenUser=(req,res,next)=>{
-    console.log(req.headers.token)
+    //console.log(req.headers.token)
     verifyToken(req,res,()=>{
         if (req.user) {
             next()

@@ -7,9 +7,6 @@ const route=(app)=>{
     app.use("/v1/user",authRouter)
     app.use("/v1/product",productRouter)
 }
-
-
-
 module.exports=route
 
 

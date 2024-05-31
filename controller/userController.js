@@ -8,11 +8,11 @@ class userController {
         try {
             const allUsers=await UsersSchema.find()
             return res.status(200).json({
+                message: "success",
                 data: allUsers
             })
         } catch (err) {
             return res.status(404).json({
-                message: "success",
                 message: err
             })
         }
@@ -33,7 +33,6 @@ class userController {
     }
     // [getAnUser]
     async getAnUser(req,res) {
-        //console.log(req.headers)
         try {
             const User= await UsersSchema.findById(req.params.id)
             return res.status(200).json({
@@ -50,14 +49,44 @@ class userController {
     async deleteUser(req,res) {
         try {
             await UsersSchema.findByIdAndDelete(req.params.id)
-            return res.status(200).json("deleteSuccess")
+            return res.status(200).json({
+                message: "success",
+            })
         } catch (err) {
             return res.status(404).json({
-                message: "success",
                 message: err
             })
         }
     }
+    async uploadImg(req, res, next) {
+        try {
+            if (!req.file) {
+                return res.status(404).json({
+                    message: "not found Img"
+                });
+            }
+            console.log(req.file)
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: "web_ban_hang"
+            })
+
+            const user = await UsersSchema.findById(req.params.id)
+            if (!user) {
+                return res.status(404).json({ message: "User not found!" })
+            }
+
+            user.avatar = result.secure_url;
+            await user.save();
+
+            return res.status(200).json({
+                message: "success",
+                data: user
+            });
+        } catch (err) {
+            return res.status(404).json({
+                message: err
+            });
+        }}
 }
 
 

@@ -3,6 +3,7 @@ const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const dotenv=require("dotenv")
 
+
 dotenv.config()
 
 
@@ -12,7 +13,7 @@ class authController {
         return jwt.sign({
             id: user.id,
             isAdmin: user.isAdmin
-        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "5s" })
+        },process.env.ACCESS_TOKEN_KEY,{ expiresIn: "50s" })
     }
     //REFRESH_TOKEN
     async generateRefreshToken(user) {
@@ -120,5 +121,6 @@ class authController {
             })
         }
     }
+
 }
 module.exports= new authController

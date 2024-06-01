@@ -1,5 +1,5 @@
 const UsersSchema=require("../model/UserModel")
-
+const cloudinary = require('cloudinary').v2
 
 
 class userController {
@@ -63,34 +63,26 @@ class userController {
             if (!req.file) {
                 return res.status(404).json({
                     message: "not found Img"
-                });
+                })
             }
-            console.log(req.file)
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "web_ban_hang"
             })
-
             const user = await UsersSchema.findById(req.params.id)
             if (!user) {
                 return res.status(404).json({ message: "User not found!" })
             }
-
-            user.avatar = result.secure_url;
-            await user.save();
-
+            user.avatar = result.secure_url
+            await user.save()
             return res.status(200).json({
                 message: "success",
                 data: user
-            });
+            })
         } catch (err) {
             return res.status(404).json({
                 message: err
-            });
-        }}
+            })
+        }
+    }
 }
-
-
-
-
-
 module.exports= new userController

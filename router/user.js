@@ -2,7 +2,6 @@ const express=require("express")
 const Router=express.Router()
 const uploadCloud = require('../config/cloudinary.config')
 const {verifyTokenAndUserAuthorization,verifyTokenAdmin,verifyTokenUserAuthorization}=require("../middleware/verifyToken")
-
 const userController=require("../controller/userController")
 
 // [get] getAll
@@ -14,6 +13,6 @@ Router.get("/getUser/:id", verifyTokenUserAuthorization, userController.getAnUse
 // [getAnUser] getAnUser
 Router.delete("/delete/:id",verifyTokenAdmin,userController.deleteUser)
 // [upload] upload file image
-Router.post("/avatar/:id",uploadCloud.single('image'),userController.u)
+Router.post("/avatar/:id",uploadCloud.single('image'),userController.uploadImg)
 
 module.exports=Router

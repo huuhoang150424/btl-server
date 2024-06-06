@@ -1,5 +1,5 @@
 const ProductsSchema=require("../model/ProductsModel")
-
+const cloudinary = require('cloudinary').v2
 
 class productsController {
     // [GET]
@@ -74,7 +74,7 @@ class productsController {
     // [UPDATE]
     async updateProduct(req,res) {
         try {
-            const newProduct=await ProductsSchema.findByIdAndUpdate({_id: req.params.id},req.body,{new:true})
+            const newProduct=await ProductsSchema.findByIdAndUpdate({_id: req.params.id},{image: req?.file?.path,...req.body},{new:true})
             return res.status(200).json({
                 message: "success",
                 data: newProduct
@@ -88,9 +88,20 @@ class productsController {
     // [CREATE]
     async createProduct(req,res) {
         try {
-            const newProduct=new ProductsSchema(req.body)
-            await newProduct.save()
+            const {name,type,price,countInStock,description,discount,rating}=req.body
+            const newProduct=new ProductsSchema({
+                name,
+                type,
+                price,
+                countInStock,
+                description,
+                discount,
+                rating,
+                image: req.file.path
+            })
+            const newP=await newProduct.save()
             return res.status(200).json({
+                newP,
                 message: "success"
             })
         } catch(err) {

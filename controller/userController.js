@@ -1,5 +1,4 @@
 const UsersSchema=require("../model/UserModel")
-const cloudinary = require('cloudinary').v2
 
 
 class userController {
@@ -20,9 +19,9 @@ class userController {
     // [Update]
     async updateUser(req,res) {
         try {
-            const newUser= await UsersSchema.findByIdAndUpdate({_id: req.params.id},req.body,{new:true})
+            const newUser= await UsersSchema.findByIdAndUpdate({_id: req.params.id},{avatar:req?.file?.path,...req.body},{new:true})
             return res.status(200).json({
-                message: "success",
+                message: "cập nhật thành công",
                 data: newUser
             })
         } catch (err) {
@@ -60,6 +59,7 @@ class userController {
     }
     async uploadImg(req, res, next) {
         try {
+            console.log(req.file)
             if (!req.file) {
                 return res.status(404).json({
                     message: "not found Img"
@@ -73,10 +73,10 @@ class userController {
                 return res.status(404).json({ message: "User not found!" })
             }
             user.avatar = result.secure_url
-            await user.save()
+            const newUser=await user.save()
             return res.status(200).json({
                 message: "success",
-                data: user
+                data: newUser
             })
         } catch (err) {
             return res.status(404).json({

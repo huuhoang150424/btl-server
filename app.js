@@ -20,6 +20,8 @@ app.use(cookieParser())
 //http logger
 app.use(morgan('combined'))
 
+
+
 //chặn
 app.use(cors({
     origin: 'http://localhost:5173',

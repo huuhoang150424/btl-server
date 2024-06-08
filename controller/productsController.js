@@ -102,11 +102,11 @@ class productsController {
             const newP=await newProduct.save()
             return res.status(200).json({
                 newP,
-                message: "success"
+                message: "tạo mới sản phẩm thành công"
             })
         } catch(err) {
             return res.status(404).json({
-                message: err
+                message: "tạo mới thất bại"
             })
         }
     }
